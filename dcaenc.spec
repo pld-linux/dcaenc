@@ -6,14 +6,19 @@
 Summary:	Encoder for DTS Coherent Acoustics audio format
 Summary(pl.UTF-8):	Koder formatu dźwięku DTS Coherent Acoustics
 Name:		dcaenc
-Version:	2
+Version:	3
 Release:	1
 License:	LGPL v2.1+ (but requires patent license in some countries)
 Group:		Libraries
-Source0:	http://aepatrakov.narod.ru/olderfiles/1/%{name}-%{version}.tar.gz
-# Source0-md5:	9da4d1b4716d7ab49b4cb9c6ac9461df
-URL:		http://aepatrakov.narod.ru/index/0-2
+#Source0Download: https://gitlab.com/patrakov/dcaenc/-/releases
+Source0:	https://gitlab.com/patrakov/dcaenc/-/archive/v%{version}/%{name}-%{version}.tar.bz2
+# Source0-md5:	7b6eabcfc462f93c745e577b3331d38b
+URL:		https://gitlab.com/patrakov/dcaenc
+BuildRequires:	autoconf >= 2.65
+BuildRequires:	automake
 BuildRequires:	alsa-lib-devel >= 1.0.11
+BuildRequires:	libtool >= 2:2
+BuildRequires:	pkgconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -66,9 +71,14 @@ DTS Coherent Acoustics output plugin for ALSA.
 Wtyczka wyjściowa DTS Coherent Acoustics dla systemu ALSA.
 
 %prep
-%setup -q
+%setup -q -n %{name}-v%{version}-9b89d76025bfdaffd2ed59f51225316c1da8c5ce
 
 %build
+%{__libtoolize}
+%{__aclocal} -I m4
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	%{!?with_alsa:--disable-alsa} \
 	%{?with_static_libs:--enable-static}
